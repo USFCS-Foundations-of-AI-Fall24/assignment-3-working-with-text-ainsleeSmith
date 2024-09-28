@@ -19,7 +19,17 @@ class Cluster :
 
     ## You do this.
     def calculate_centroid(self):
-        pass
+        d = Document(true_class='pos')
+        token_sum = 0
+        for m in self.members :
+            token_sum = token_sum + sum([(m.tokens[item]) for item in m.tokens])
+        avg = token_sum/len(self.members)
+        # d.tokens = "avg",avg
+        i = 0
+        while i < avg :
+            d.add_tokens("avg")
+        return d
+        # pass
 
 
 # Call like so: k_means(2, ['pos','neg'], positive_docs + negative_docs)

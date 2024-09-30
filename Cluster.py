@@ -40,11 +40,11 @@ def k_means(n_clusters, true_classes, data) :
     ## initially assign data randomly.
         # TODO use random function # cluster_list[random]
     for d in data :
-        cluster_list[random.randint(0,n_clusters)] = d
+        cluster_list[random.randint(0,(n_clusters - 1))] = d
 
     ## compute initial cluster centroids
     for c in cluster_list :
-        c.centroid = c.calculate_centroid()
+        c.centroid = Cluster.calculate_centroid(c)
 
     # while not done and i < limit
     #   i++
@@ -53,13 +53,15 @@ def k_means(n_clusters, true_classes, data) :
     #   reassign each Document to the closest matching cluster using
     #   cosine similarity
     for d in data :
-        closest = 100
+        closest = 10000
+        best_fit = None
         for c in cluster_list :
             sim = cosine_similarity(d, c.centroid)
             if  sim < closest :
                 closest = sim
-                c.append(data)
-                # TODO remove data from its current cluster??
+                best_fit = c
+        best_fit.append(data)
+        # TODO remove data from its current cluster??
 
     #   compute the centroids of each cluster
     for c in cluster_list :

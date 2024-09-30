@@ -23,3 +23,9 @@ def five_fold_cross_validation(nwords, nelements) :
     # return the average accuracy
 
 
+    # NOTES FROM CLASS
+    # make five clusters/lists, put documents evenly in the clusters
+    # train on clusters 1-4 and test on 5, get accuracy
+    # train on clusters 1-3 and 5 and test on 4, get accuracy
+    # ect,
+    # average all of the accuracies from the 5 different training patterns

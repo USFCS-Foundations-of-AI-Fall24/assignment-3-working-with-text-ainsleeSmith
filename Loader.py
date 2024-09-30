@@ -67,6 +67,7 @@ def compute_homogeneity(list_of_clusters, list_of_classes) :
     hlist = []
 
     return hlist
+    # TODO how many in the pos vs neg classes
 
 ## completeness: for the dominant class in each cluster, what fraction
 # of that class' members are in that cluster?
@@ -79,6 +80,7 @@ def compute_completeness(list_of_clusters, list_of_classes) :
     clist = []
 
     return clist
+    # TODO classes are pos and neg
 
 if __name__=="__main__" :
 

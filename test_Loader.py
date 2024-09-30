@@ -4,7 +4,11 @@ from Loader import *
 
 class Test(TestCase):
     def test_apply_filters(self):
-        pass
+        t1 = "fish!"
+        t2 = "FiSh"
+        self.assertEqual(remove_trailing_punct(t1), "fish")
+        self.assertEqual(convert_to_lowercase(t2), "fish")
+        # pass
 
     def test_apply_transforms(self):
         pass

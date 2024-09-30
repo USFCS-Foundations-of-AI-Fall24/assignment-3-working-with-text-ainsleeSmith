@@ -1,5 +1,6 @@
 ## Code for loading training sets and creating documents.
 import string
+from operator import truediv
 
 from Document import *
 from Cluster import *
@@ -20,6 +21,9 @@ def create_easy_documents(list_of_docs, true_class, filters=None, transforms=Non
             words = [word for word in words if f(word)]
 
         ## deal with transforms here
+        # for word in words :
+        #     remove_trailing_punct(word)
+        #     convert_to_lowercase(word)
 
         d.add_tokens(words)
         document_list.append(d)
@@ -29,21 +33,28 @@ def create_easy_documents(list_of_docs, true_class, filters=None, transforms=Non
 
 # you do this.
 def not_stopword(token) :
-    pass
+    if (token != "a") and (token != "an") and (token != "the") :
+        return True
+    return False
+    #pass
 
 def not_cat(token) :
-    return token is not 'cat'
+    return token != 'cat'
+    # return token is not 'cat'
 
 
 # transforms - convert a token into a new format
 
 # you do this.
 def remove_trailing_punct(token) :
-    pass
+    for p in string.punctuation :
+        if token[-1] == p :
+            token = token.strip(token[-1])
+    return token
 
 # and this
 def convert_to_lowercase(token) :
-    pass
+    return token.lower()
 
 
 
@@ -63,7 +74,7 @@ def compute_homogeneity(list_of_clusters, list_of_classes) :
 # result = k_means(2, ['pos','neg'], positive_docs + negative_docs)
 # compute_completeness(result, ['pos','neg'])
 
-def compute_completeness(list_of_clusters, list_of_classes)
+def compute_completeness(list_of_clusters, list_of_classes) :
     # clist will be the homogeneity for each cluster.
     clist = []
 

@@ -20,14 +20,12 @@ class Cluster :
     ## You do this.
     def calculate_centroid(self):
         d = Document(true_class='pos')
-        token_sum = 0
-        for m in self.members :
-            token_sum = token_sum + sum([(m.tokens[item]) for item in m.tokens])
-        avg = token_sum/len(self.members)
-        # d.tokens = "avg",avg
-        i = 0
-        while i < avg :
-            d.add_tokens("avg")
+        for m in self.members: # add all the keys from the member docs to the centroid doc
+            d.add_tokens(m.tokens)
+        for item in d.tokens : # set the value for the tokens to the avg
+            val = d.tokens[item]
+            val = val / len(self.members)
+            d.tokens[item] = val
         return d
         # pass
 
@@ -40,31 +38,41 @@ def k_means(n_clusters, true_classes, data) :
     ## initially assign data randomly.
         # TODO use random function # cluster_list[random]
     for d in data :
-        cluster_list[random.randint(0,(n_clusters - 1))] = d
-
+        index = random.randint(0,n_clusters - 1)
+        cluster_list[index].members.append(d)
+        d.cluster = cluster_list[index]
+        # append to the members list
     ## compute initial cluster centroids
     for c in cluster_list :
         c.centroid = Cluster.calculate_centroid(c)
 
     # while not done and i < limit
     #   i++
-    # TODO WHAT DOES THIS MEAN?!?!
+    # ex: either all clusters are septerated or do 10
+    # if nobody moves then exit loop, if somone moves then done = false
+    done = False
+    limit = 10
+    i = 0
+    while not done and (i < limit) :
+        # add a member variable to the document class to tell which cluster it is in
+        #   reassign each Document to the closest matching cluster using
+        #   cosine similarity
+        done = True
+        for d in data :
+            closest = 10000
+            best_fit = d.cluster
+            for c in cluster_list :
+                sim = cosine_similarity(d, c.centroid)
+                if  sim < closest :
+                    closest = sim
+                    best_fit = c
+            if best_fit != d.cluster : # if one is moved then we are not done
+                done = False
+            best_fit.members.append(d)
+            # TODO remove data from its current cluster??
 
-    #   reassign each Document to the closest matching cluster using
-    #   cosine similarity
-    for d in data :
-        closest = 10000
-        best_fit = None
+        #   compute the centroids of each cluster
         for c in cluster_list :
-            sim = cosine_similarity(d, c.centroid)
-            if  sim < closest :
-                closest = sim
-                best_fit = c
-        best_fit.append(data)
-        # TODO remove data from its current cluster??
-
-    #   compute the centroids of each cluster
-    for c in cluster_list :
-        c.centroid = c.calculate_centroid()
-
+            c.centroid = c.calculate_centroid()
+        i = i + 1
     return cluster_list

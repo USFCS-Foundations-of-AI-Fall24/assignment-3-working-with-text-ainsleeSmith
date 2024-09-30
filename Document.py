@@ -4,9 +4,10 @@ from collections import defaultdict
 from math import sqrt
 
 class Document :
-    def __init__(self, true_class=None):
+    def __init__(self, true_class=None, cluster=None):
         self.true_class = true_class
         self.tokens = defaultdict(lambda:0)
+        self.cluster = cluster
 
     def add_tokens(self, token_list) :
         for item in token_list :

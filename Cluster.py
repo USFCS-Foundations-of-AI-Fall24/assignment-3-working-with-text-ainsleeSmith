@@ -38,13 +38,31 @@ def k_means(n_clusters, true_classes, data) :
     cluster_list = [Cluster(centroid=Document(true_class=item)) for item in true_classes]
 
     ## initially assign data randomly.
+        # TODO use random function # cluster_list[random]
+    for d in data :
+        cluster_list[random.randint(0,n_clusters)] = d
 
     ## compute initial cluster centroids
+    for c in cluster_list :
+        c.centroid = c.calculate_centroid()
 
     # while not done and i < limit
     #   i++
+    # TODO WHAT DOES THIS MEAN?!?!
 
     #   reassign each Document to the closest matching cluster using
     #   cosine similarity
+    for d in data :
+        closest = 100
+        for c in cluster_list :
+            sim = cosine_similarity(d, c.centroid)
+            if  sim < closest :
+                closest = sim
+                c.append(data)
+                # TODO remove data from its current cluster??
+
     #   compute the centroids of each cluster
+    for c in cluster_list :
+        c.centroid = c.calculate_centroid()
+
     return cluster_list

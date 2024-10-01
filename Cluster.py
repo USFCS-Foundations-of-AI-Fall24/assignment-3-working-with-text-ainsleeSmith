@@ -21,6 +21,7 @@ class Cluster :
     def calculate_centroid(self):
         d = Document(true_class='pos')
         for m in self.members: # add all the keys from the member docs to the centroid doc
+
             d.add_tokens(m.tokens)
         for item in d.tokens : # set the value for the tokens to the avg
             val = d.tokens[item]
@@ -37,10 +38,15 @@ def k_means(n_clusters, true_classes, data) :
 
     ## initially assign data randomly.
         # TODO use random function # cluster_list[random]
+    # index = 0
     for d in data :
         index = random.randint(0,n_clusters - 1)
         cluster_list[index].members.append(d)
         d.cluster = cluster_list[index]
+        # if index == 0 :
+        #     index = 1
+        # elif index == 1 :
+        #     index = 0
         # append to the members list
     ## compute initial cluster centroids
     for c in cluster_list :
@@ -59,17 +65,18 @@ def k_means(n_clusters, true_classes, data) :
         #   cosine similarity
         done = True
         for d in data :
-            closest = 10000
+            closest = 0
             best_fit = d.cluster
             for c in cluster_list :
                 sim = cosine_similarity(d, c.centroid)
-                if  sim < closest :
+                if  sim > closest :
                     closest = sim
                     best_fit = c
             if best_fit != d.cluster : # if one is moved then we are not done
                 done = False
-            best_fit.members.append(d)
-            # TODO remove data from its current cluster??
+                best_fit.members.append(d)
+                d.cluster.members.remove(d)
+                d.cluster = best_fit
 
         #   compute the centroids of each cluster
         for c in cluster_list :
